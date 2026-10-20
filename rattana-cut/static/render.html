@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8"><title>Rattana Cut render v1.0</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Kanit:wght@400;500;700&family=Prompt:wght@400;500;700&family=Mitr:wght@400;500;700&family=Sarabun:wght@400;700&family=Chakra+Petch:wght@400;700&family=IBM+Plex+Sans+Thai:wght@400;700&family=Bai+Jamjuree:wght@400;700&family=Athiti:wght@400;700&family=Chonburi&family=Pridi:wght@400;700&family=Itim&family=Sriracha&family=Mali:wght@400;700&family=Charm:wght@400;700&display=block">
+<style>html,body{margin:0;background:#000;overflow:hidden}#st{transform-origin:0 0}</style></head>
+<body><div id="st"></div>
+<script src="compositor.js"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search), pid = q.get('p'), short = +(q.get('short') || 1080);
+  const P = await (await fetch(`/api/projects/${pid}`)).json();
+  const stage = new RC.Stage(document.getElementById('st'), P, { mode: 'render' });
+  const [W, H] = RC.frameSize(P.ratio, short), k = W / stage.W;
+  document.getElementById('st').style.transform = `scale(${k})`;
+  document.body.style.width = W + 'px'; document.body.style.height = H + 'px';
+  const total = RC.layout(P).total;
+  await Promise.all([...document.querySelectorAll('video')].map(v => v.readyState >= 2 ? 0 : new Promise(r => { v.addEventListener('loadeddata', r, { once: true }); setTimeout(r, 8000); })));
+  window.seek = async t => { const w = stage.draw(t, false); if (w) await w; };
+  window.buildAudio = ctx => RC.buildAudio(ctx, P);
+  window.VIDEO = { w: W, h: H, duration: total };
+})();
+</script></body></html>

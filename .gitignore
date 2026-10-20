@@ -1,0 +1,26 @@
+# secrets (API keys)
+rattana-cut/settings.json
+# user projects, renders and media
+rattana-cut/projects/
+autoedit-test/
+rattana-1min/assets/
+rattana-1min/vo.js
+voice-colab/takes/
+voice-colab/fix/
+voice-colab/final/
+*.mp4
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.rcut
+*.zip
+*.pcm
+*.jpg
+*.png
+*.frames/
+# local tooling
+.claude/
+__pycache__/
+node_modules/

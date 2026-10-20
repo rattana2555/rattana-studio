@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>รัตนไพบูลย์ ใน 1 นาที v1.1</title>
+<style>
+:root{--navy-900:#0B1530;--navy-800:#0D1B3E;--navy-600:#1A2D5F;--gold-500:#C9A84C;--gold-300:#E6C878;--cream:#F4F1E8;--ink:#111114;--blue:#2F47FF;
+  --w1:#FBBF24;--w2:#0EA5E9;--w3:#EF4444;--w4:#15803D;--c4:#4ADE80}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy-900)}
+body{font-family:"Leelawadee UI",sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased}
+.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+.abs{position:absolute}
+.c{left:0;right:0;text-align:center}
+.mono{font-family:Consolas,monospace;letter-spacing:4px}
+.slam{font-weight:700;line-height:1.15;white-space:nowrap}
+/* HUD */
+.hud i{position:absolute;width:70px;height:70px;border-color:var(--gold-500);border-style:solid;opacity:.85}
+.hud i:nth-child(1){left:64px;top:150px;border-width:4px 0 0 4px}
+.hud i:nth-child(2){right:64px;top:150px;border-width:4px 4px 0 0}
+.hud i:nth-child(3){left:64px;bottom:150px;border-width:0 0 4px 4px}
+.hud i:nth-child(4){right:64px;bottom:150px;border-width:0 4px 4px 0}
+/* captions */
+#cap{position:absolute;left:64px;right:64px;bottom:168px;text-align:center;z-index:50;pointer-events:none}
+#cap span{display:inline-block;font-size:58px;font-weight:700;line-height:1.3;padding:10px 30px 14px;border-radius:18px;background:rgba(11,21,48,.82);color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.35);white-space:nowrap}
+#cap.light span{background:rgba(255,255,255,.92);color:var(--ink)}
+#wipe{position:absolute;top:-200px;bottom:-200px;width:520px;background:linear-gradient(90deg,transparent,var(--gold-500) 30%,var(--gold-300) 50%,var(--gold-500) 70%,transparent);transform:skewX(-14deg);z-index:60;visibility:hidden}
+/* S2 cards */
+.card{position:absolute;left:110px;right:110px;height:150px;border-radius:28px;background:rgba(13,27,62,.78);border:2px solid rgba(201,168,76,.55);display:flex;align-items:center;gap:30px;padding:0 44px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.card .num{font-family:Bahnschrift,"Arial Black",sans-serif;font-weight:700;font-size:92px;color:var(--gold-300);min-width:330px;text-align:right;font-variant-numeric:tabular-nums}
+.card .lab{font-size:58px;font-weight:700;color:#fff;white-space:nowrap}
+/* S3 map */
+.pin-lab{position:absolute;display:flex;align-items:center;gap:16px;font-size:60px;font-weight:700;color:var(--ink);white-space:nowrap}
+.chip{display:inline-block;font-family:Consolas,monospace;font-size:38px;font-weight:700;padding:6px 16px;border-radius:12px;color:#fff}
+/* S4 */
+.station{position:absolute;top:0;width:520px;height:620px;display:flex;flex-direction:column;align-items:center}
+.station .disc{width:300px;height:300px;border-radius:50%;background:var(--navy-600);border:6px solid rgba(201,168,76,.35);display:flex;align-items:center;justify-content:center}
+.station svg{width:150px;height:150px;stroke:var(--cream);fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.station .nm{margin-top:36px;font-size:62px;font-weight:700;white-space:nowrap}
+/* S5 */
+.tile{position:absolute;width:118px;height:118px;border-radius:24px;background:#fff;border:3px solid #E3DED0;box-shadow:0 6px 14px rgba(13,27,62,.08);overflow:hidden}
+.tile b{position:absolute;left:14px;right:14px;height:12px;border-radius:6px;background:#E8E3D4}
+.tile .top{position:absolute;left:0;right:0;top:0;height:30px}
+.tile .ok{position:absolute;right:8px;bottom:8px;width:38px;height:38px;border-radius:50%;background:var(--w4);display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- S1 opener -->
+<section class="scene" id="s1">
+  <div class="hud"><i></i><i></i><i></i><i></i></div>
+  <div class="abs mono c" id="s1tag" style="top:250px;font-size:32px;color:var(--gold-300)">RATTANAPHAIBOON · FMCG</div>
+  <div class="abs" id="s1bar" style="left:0;top:880px;height:16px;width:1080px;background:var(--gold-500);transform-origin:left"></div>
+  <div class="abs slam c" id="s1name" style="top:650px;font-size:150px;color:#fff">รัตนไพบูลย์</div>
+  <div class="abs c" id="s1w1" style="top:960px"><span class="slam" style="font-size:110px;color:var(--gold-300)">ค้าส่ง</span></div>
+  <div class="abs c" id="s1w2" style="top:1110px"><span class="slam" style="font-size:110px;color:#fff">กระจายสินค้า</span></div>
+  <div class="abs c" id="s1w3" style="top:1260px"><span class="slam" style="font-size:110px;color:var(--gold-300)">ค้าปลีก</span></div>
+</section>
+
+<!-- S2 b-roll + stats -->
+<section class="scene" id="s2">
+  <video id="broll" src="assets/broll.webm" muted playsinline preload="auto" class="abs" style="inset:0;width:1080px;height:1920px;object-fit:cover;filter:blur(10px) brightness(.8);transform:scale(1.08)"></video>
+  <div class="abs" style="inset:0;background:linear-gradient(180deg,rgba(11,21,48,.82),rgba(11,21,48,.55) 45%,rgba(11,21,48,.85))"></div>
+  <div class="abs c slam" id="s2h" style="top:250px;font-size:72px;line-height:1.3;white-space:normal;padding:0 80px">ผู้กระจายสินค้า<br><span style="color:var(--gold-300);font-size:96px">อุปโภคบริโภค</span></div>
+  <div class="card" id="c0" style="top:560px"><div class="num" data-n="4">4</div><div class="lab">คลังสินค้า</div></div>
+  <div class="card" id="c1" style="top:740px"><div class="num" data-n="1">1</div><div class="lab">หน้าร้าน</div></div>
+  <div class="card" id="c2" style="top:920px"><div class="num" data-n="20000" data-plus="1">20,000+</div><div class="lab">รายการสินค้า</div></div>
+  <div class="card" id="c3" style="top:1100px"><div class="num" data-n="60">60</div><div class="lab">คัน รถส่ง</div></div>
+  <div class="card" id="c4" style="top:1280px"><div class="num" data-n="300" data-pre="~">~300</div><div class="lab">คน ทีมงาน</div></div>
+</section>
+
+<!-- S3 map -->
+<section class="scene" id="s3" style="background:var(--cream)">
+  <svg class="abs" style="inset:0" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter>
+      <pattern id="paper" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#F4F1E8"/><circle cx="1" cy="2" r=".7" fill="#E7E1CF"/><circle cx="4" cy="5" r=".5" fill="#ECE6D6"/></pattern>
+    </defs>
+    <rect width="1080" height="1920" fill="url(#paper)"/>
+    <g filter="url(#rough)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path id="land" d="M210 520 C330 450 470 470 600 500 C720 530 860 520 900 640 C940 760 870 860 900 980 C930 1100 860 1230 760 1300 C650 1380 560 1360 470 1400 C380 1440 280 1380 230 1270 C180 1160 250 1060 210 950 C170 840 120 640 210 520 Z" stroke="#1A2D5F" stroke-width="6"/>
+      <path id="sea" d="M560 1460 C640 1430 760 1420 860 1470" stroke="#0EA5E9" stroke-width="5" stroke-dasharray="18 14"/>
+      <path id="route" d="M420 690 C520 760 610 800 680 880 M680 880 C600 990 500 1050 400 1080 M400 1080 C470 1170 560 1230 640 1290" stroke="#C9A84C" stroke-width="7" stroke-dasharray="4 18"/>
+    </g>
+    <text x="560" y="1530" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="40" fill="#0EA5E9" opacity=".8">อ่าวไทย</text>
+  </svg>
+  <div class="abs c slam" id="s3h" style="top:250px;font-size:84px;color:var(--ink)">คลังของเราอยู่ที่</div>
+  <div class="abs mono c" style="top:370px;font-size:30px;color:#8A7F63">4 WAREHOUSES · WESTERN-CENTRAL THAILAND</div>
+  <div id="pins"></div>
+</section>
+
+<!-- S4 journey -->
+<section class="scene" id="s4">
+  <div class="abs c slam" id="s4h" style="top:250px;font-size:80px">ทุกลังเดินทาง<span style="color:var(--gold-300)">เป็นระบบ</span></div>
+  <div class="abs" id="world" style="left:0;top:760px;height:640px;width:4000px">
+    <div class="abs" id="track" style="left:260px;top:146px;height:8px;background:rgba(201,168,76,.35);border-radius:4px"></div>
+    <div class="abs" id="trackfill" style="left:260px;top:146px;height:8px;background:var(--gold-500);border-radius:4px;width:0"></div>
+    <div id="stations"></div>
+    <div class="abs" id="done4" style="left:0;top:-10px;width:96px;height:96px;border-radius:50%;background:var(--w4);border:6px solid #fff;display:flex;align-items:center;justify-content:center;opacity:0;z-index:3"><svg width="54" height="54" viewBox="0 0 24 24"><path d="M5 12 l5 5 l9 -10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg></div>
+    <div class="abs" id="box"style="left:0;top:96px;width:108px;height:108px">
+      <svg viewBox="0 0 100 100" width="108" height="108"><path d="M50 8 L90 28 L90 72 L50 92 L10 72 L10 28 Z" fill="#C9A84C" stroke="#E6C878" stroke-width="5"/><path d="M10 28 L50 48 L90 28 M50 48 L50 92" stroke="#7a5f1c" stroke-width="5" fill="none"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- S5 apps -->
+<section class="scene" id="s5" style="background:var(--cream)">
+  <div class="abs c" style="top:240px"><span class="slam" style="font-size:76px;color:var(--ink)">เบื้องหลังคือ</span></div>
+  <div class="abs c" style="top:340px"><span class="slam" id="s5n" style="font-family:Bahnschrift,'Arial Black',sans-serif;font-size:230px;color:var(--navy-800)">60+</span></div>
+  <div class="abs c slam" style="top:600px;font-size:70px;color:var(--ink)">เว็บแอป<span style="color:var(--gold-500)">ที่ทีมเราพัฒนาเอง</span></div>
+  <div id="tiles" class="abs" style="left:0;top:740px;width:1080px;height:760px"></div>
+</section>
+
+<!-- S6 Rattana Mart -->
+<section class="scene" id="s6">
+  <div class="abs mono c" style="top:240px;font-size:38px;color:var(--gold-300)">RATTANA MART</div>
+  <div class="abs c slam" id="s6h" style="top:300px;font-size:96px">รัตนมาร์ท</div>
+  <div class="abs" id="s6card" style="left:130px;top:470px;width:820px;height:1080px;border-radius:44px;overflow:hidden;border:6px solid var(--gold-500);box-shadow:0 30px 60px rgba(0,0,0,.45)">
+    <video id="mart" src="assets/mart.webm" muted playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;object-position:50% 0%;transform:scale(1.32);transform-origin:50% 50%"></video>
+  </div>
+  <div class="abs" id="s6chip" style="left:0;right:0;top:1578px;text-align:center"><span class="chip" style="background:var(--c4);color:#0B1530;font-size:44px;padding:10px 24px">C4</span><span class="slam" style="font-size:60px;margin-left:18px">หน้าร้านที่นครปฐม</span></div>
+</section>
+
+<!-- S7 logo -->
+<section class="scene" id="s7">
+  <svg class="abs" style="left:290px;top:520px" width="500" height="500" viewBox="0 0 500 500">
+    <circle id="ring" cx="250" cy="250" r="232" fill="none" stroke="#C9A84C" stroke-width="12" stroke-linecap="round" transform="rotate(-90 250 250)"/>
+    <circle id="ring2" cx="250" cy="250" r="206" fill="none" stroke="#E6C878" stroke-width="3" stroke-dasharray="4 10" opacity=".7"/>
+  </svg>
+  <div class="abs" id="logoWrap" style="left:330px;top:560px;width:420px;height:420px;border-radius:50%;overflow:hidden;background:#fff"><img id="logo" src="assets/logo.png" style="width:100%;height:100%;object-fit:cover"></div>
+  <div class="abs c slam" id="s7n" style="top:1100px;font-size:128px">รัตนไพบูลย์</div>
+  <div class="abs mono c" id="s7s" style="top:1290px;font-size:36px;color:var(--gold-300)">RATTANAPHAIBOON</div>
+</section>
+
+<div id="wipe"></div>
+<div id="cap"><span></span></div>
+
+<script src="timing.js"></script>
+<script src="vo.js"></script>
+<script>
+'use strict';
+const T = window.TM;                       // scene starts, vo offsets, phrase times (from timing.js)
+window.VIDEO = { w: 1080, h: 1920, duration: T.total };
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const prog = (t, a, d) => clamp((t - a) / d);
+const lerp = (a, b, p) => a + (b - a) * p;
+const eOut = x => 1 - Math.pow(1 - x, 3);
+const eIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const eBack = x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const set = (el, o) => { for (const k in o) el.style[k] = o[k]; };
+const P = (s, i) => T.vo[s] + T.ph[s][i];   // absolute time of phrase i in scene s
+
+/* ── slam: scale down from big, blur clears ── */
+function slam(el, t, at, from = 1.5) {
+  const p = prog(t, at, .32), e = eOut(p);
+  set(el, { opacity: p > 0 ? clamp(p * 3) : 0, transform: `scale(${lerp(from, 1, e)})`, filter: `blur(${(1 - e) * 14}px)` });
+}
+function pop(el, t, at, dy = 40) {
+  const p = prog(t, at, .45);
+  set(el, { opacity: clamp(p * 2.5), transform: `translateY(${(1 - eOut(p)) * dy}px) scale(${lerp(.8, 1, eBack(p))})` });
+}
+
+/* ── build S3 pins ── */
+const PINS = [
+  { code: 'W1', col: 'var(--w1)', name: 'สมุทรสงคราม', x: 640, y: 1290, lx: -40, ly: 70, al: 'right' },
+  { code: 'W2', col: 'var(--w2)', name: 'สุพรรณบุรี', x: 420, y: 690, lx: 40, ly: -150, al: 'left' },
+  { code: 'W3', col: 'var(--w3)', name: 'ราชบุรี', x: 400, y: 1080, lx: -20, ly: 50, al: 'left' },
+  { code: 'W4', col: 'var(--w4)', name: 'นครปฐม', x: 680, y: 880, lx: 50, ly: -40, al: 'left' },
+];
+$('pins').innerHTML = PINS.map((p, i) => `
+  <div class="abs" id="pin${i}" style="left:${p.x - 34}px;top:${p.y - 34}px;width:68px;height:68px;border-radius:50%;background:${p.col};border:7px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.25)"></div>
+  <div class="abs" id="ring${i}" style="left:${p.x - 34}px;top:${p.y - 34}px;width:68px;height:68px;border-radius:50%;border:5px solid ${p.col}"></div>
+  <div class="pin-lab" id="pl${i}" style="${p.al === 'right' ? `right:${1080 - p.x - p.lx}px` : `left:${p.x + p.lx}px`};top:${p.y + p.ly}px"><span class="chip" style="background:${p.col}">${p.code}</span>${p.name}</div>`).join('');
+const land = document.querySelector('#land'), route = document.querySelector('#route');
+const LL = land.getTotalLength(), RL = route.getTotalLength();
+
+/* ── build S4 stations ── */
+const ICON = {
+  factory: '<path d="M10 90 V45 L35 58 V45 L60 58 V20 H80 V90 Z"/><path d="M25 75 H40 M55 75 H70"/>',
+  wh: '<path d="M8 90 V40 L50 15 L92 40 V90"/><path d="M25 90 V55 H75 V90 M25 68 H75 M25 80 H75"/>',
+  phone: '<rect x="28" y="8" width="44" height="84" rx="8"/><path d="M40 30 H60 M40 44 H60 M40 58 H52"/><circle cx="50" cy="80" r="3"/>',
+  list: '<rect x="18" y="12" width="64" height="78" rx="6"/><path d="M32 34 l5 5 l9 -10 M54 36 H70 M32 56 l5 5 l9 -10 M54 58 H70 M32 76 H70"/>',
+  truck: '<path d="M6 30 H60 V74 H6 Z M60 44 H80 L94 58 V74 H60"/><circle cx="24" cy="78" r="9"/><circle cx="76" cy="78" r="9"/>',
+  shop: '<path d="M10 38 L18 12 H82 L90 38 Z M14 38 V90 H86 V38"/><path d="M40 90 V62 H60 V90"/><path d="M10 38 Q22 50 34 38 Q46 50 58 38 Q70 50 82 38"/>',
+};
+const ST = [['factory', 'ซัพพลายเออร์'], ['wh', 'เข้าคลัง'], ['phone', 'เซลล์ยิงออเดอร์'], ['list', 'คลังจัดของ'], ['truck', 'ขึ้นรถ'], ['shop', 'ส่งถึงร้านค้า']];
+const GAP = 600, X0 = 280;
+$('stations').innerHTML = ST.map(([ic, nm], i) => `<div class="station" id="st${i}" style="left:${X0 + i * GAP - 260}px"><div class="disc" id="sd${i}"><svg viewBox="0 0 100 100">${ICON[ic]}</svg></div><div class="nm">${nm}</div></div>`).join('');
+const TRACKW = (ST.length - 1) * GAP;
+$('track').style.width = TRACKW + 'px'; $('track').style.left = X0 + 'px'; $('trackfill').style.left = X0 + 'px';
+
+/* ── build S5 tiles (60) ── */
+const TCOL = ['#0D1B3E', '#C9A84C', '#2F47FF', '#15803D', '#EF4444', '#0EA5E9'];
+let th = '';
+for (let i = 0; i < 60; i++) {
+  const c = i % 8, r = Math.floor(i / 8), x = 64 + c * 122 + (r % 2 ? 0 : 0), y = r * 98;
+  if (r > 7) break;
+  th += `<div class="tile" id="t${i}" style="left:${x}px;top:${y}px;width:110px;height:86px"><div class="top" style="background:${TCOL[(i * 7) % 6]}"></div><b style="top:42px;right:${20 + (i * 13) % 40}px"></b><b style="top:62px"></b><div class="ok" id="ok${i}"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12 l5 5 l9 -10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg></div></div>`;
+}
+$('tiles').innerHTML = th;
+const tiles = [...document.querySelectorAll('.tile')], oks = [...document.querySelectorAll('.tile .ok')];
+
+/* ── captions ── */
+const CAPS = [];
+for (const s of Object.keys(T.ph)) T.ph[s].forEach((at, i) => CAPS.push({ t: T.vo[s] + at, end: T.vo[s] + (T.ph[s][i + 1] ?? T.voDur[s] + .25), text: T.txt[s][i], light: s === 's3' || s === 's5' }));
+const capEl = $('cap'), capSpan = capEl.querySelector('span');
+
+/* ── video helpers (async seek) ── */
+function seekVideo(v, time) {
+  return new Promise(res => {
+    if (v.readyState >= 2 && Math.abs(v.currentTime - time) < 0.001) return res();
+    const done = () => { v.removeEventListener('seeked', done); res(); };
+    v.addEventListener('seeked', done); v.currentTime = Math.min(time, (v.duration || 99) - 0.05);
+  });
+}
+const ready = Promise.all(['broll', 'mart'].map(id => new Promise(r => { const v = $(id); if (v.readyState >= 2) r(); else v.addEventListener('loadeddata', r, { once: true }); })));
+
+/* ════════ seek(t) ════════ */
+window.seek = async function (t) {
+  await ready;
+  const S = T.start;
+  const cur = S.findIndex((s, i) => t >= s && (i === S.length - 1 || t < S[i + 1]));
+  document.querySelectorAll('.scene').forEach((el, i) => el.style.visibility = i === cur ? 'visible' : 'hidden');
+  const lt = t - S[cur];
+
+  // wipe across scene boundaries (centered on the cut)
+  let w = -1; S.slice(1).forEach(b => { const p = (t - (b - .22)) / .44; if (p >= 0 && p <= 1) w = p; });
+  if (w >= 0) set($('wipe'), { visibility: 'visible', left: `${lerp(-700, 1260, eIO(w))}px` }); else $('wipe').style.visibility = 'hidden';
+
+  // captions
+  const c = CAPS.find(c => t >= c.t && t < c.end);
+  if (c) { capSpan.textContent = c.text; capEl.className = c.light ? 'light' : ''; const p = prog(t, c.t, .18); set(capEl, { opacity: clamp(p * 2), transform: `translateY(${(1 - eOut(p)) * 18}px)` }); }
+  else capEl.style.opacity = 0;
+
+  if (cur === 0) {                                       // S1
+    set($('s1tag'), { opacity: clamp(lt * 3) });
+    const bp = eIO(prog(t, P('s1', 0) - .35, .5)); $('s1bar').style.transform = `scaleX(${bp})`; $('s1bar').style.opacity = 1 - prog(t, P('s1', 1) - .2, .3) * .7;
+    slam($('s1name'), t, P('s1', 0) - .05, 1.8);
+    ['s1w1', 's1w2', 's1w3'].forEach((id, i) => slam($(id), t, P('s1', i + 1) - .05, 1.6));
+    document.querySelectorAll('#s1 .hud i').forEach((h, i) => h.style.transform = `scale(${lerp(1.6, 1, eOut(prog(lt, .05 + i * .05, .4)))})`);
+  }
+  if (cur === 1) {                                       // S2
+    const v = $('broll'); await seekVideo(v, lt * .9);
+    v.style.transform = `scale(${1.08 + lt * .01})`;
+    slam($('s2h'), t, P('s2', 0) - .1, 1.25);
+    for (let i = 0; i < 5; i++) {
+      const at = P('s2', i + 1) - .08, card = $('c' + i), num = card.querySelector('.num');
+      const p = prog(t, at, .5); set(card, { opacity: clamp(p * 3), transform: `translateX(${(1 - eOut(p)) * (i % 2 ? 160 : -160)}px)` });
+      const n = +num.dataset.n, k = eOut(prog(t, at, .9)), val = Math.round(n * k);
+      num.textContent = (num.dataset.pre || '') + val.toLocaleString('en-US') + (num.dataset.plus && k >= 1 ? '+' : '');
+      card.style.borderColor = t > at && t < at + .6 ? 'var(--gold-300)' : 'rgba(201,168,76,.55)';
+    }
+  }
+  if (cur === 2) {                                       // S3
+    set($('s3h'), { opacity: clamp(lt * 4), transform: `translateY(${(1 - eOut(prog(lt, 0, .5))) * 30}px)` });
+    land.style.strokeDasharray = LL; land.style.strokeDashoffset = LL * (1 - eIO(prog(lt, .05, 1.2)));
+    route.style.opacity = prog(t, P('s3', 4), .4);
+    const order = [0, 1, 2, 3];                          // W1 สมุทรสงคราม, W2 สุพรรณบุรี, W3 ราชบุรี, W4 นครปฐม
+    order.forEach((pi, i) => {
+      const at = P('s3', i + 1) - .05, p = prog(t, at, .45);
+      set($('pin' + pi), { opacity: clamp(p * 3), transform: `translateY(${(1 - eOut(p)) * -80}px) scale(${lerp(.4, 1, eBack(p))})` });
+      const rp = prog(t, at + .1, .8); set($('ring' + pi), { opacity: (1 - rp) * (rp > 0 ? 1 : 0), transform: `scale(${1 + rp * 2.2})` });
+      const lp = prog(t, at + .08, .35); set($('pl' + pi), { opacity: clamp(lp * 2), transform: `translateX(${(1 - eOut(lp)) * 30}px)` });
+    });
+  }
+  if (cur === 3) {                                       // S4
+    set($('s4h'), { opacity: clamp(lt * 4) });
+    const hits = ST.map((_, i) => P('s4', i + 1) - .05);
+    // box position: travels station to station, arriving on each phrase
+    let bx = X0 - 300;
+    for (let i = 0; i < ST.length; i++) { const arr = hits[i], dep = i ? hits[i - 1] : T.start[3] + .2; if (t >= dep) bx = lerp(i ? X0 + (i - 1) * GAP : X0 - 300, X0 + i * GAP, eIO(prog(t, dep, Math.max(.3, arr - dep)))); }
+    $('box').style.transform = `translate(${bx - 54}px, ${-Math.abs(Math.sin(t * 9)) * 18}px) rotate(${Math.sin(t * 9) * 6}deg)`;
+    $('trackfill').style.width = clamp(bx - X0, 0, TRACKW) + 'px';
+    // camera follows box, then pulls out at the end
+    const pull = 0;
+    const camX = lerp(540 - bx, 0, 0), scale = lerp(1, 1080 / (TRACKW + 700), pull);
+    const followX = 540 - clamp(bx, X0, X0 + TRACKW), fitX = (1080 - (TRACKW + 520) * scale) / 2 - (X0 - 260) * scale;
+    $('world').style.transform = `translateX(${lerp(followX, fitX, pull)}px) translateY(${pull * 120}px) scale(${scale})`;
+    $('world').style.transformOrigin = '0 0';
+    ST.forEach((_, i) => { const p = prog(t, hits[i], .3), on = t >= hits[i];
+      set($('sd' + i), { borderColor: on ? 'var(--gold-500)' : 'rgba(201,168,76,.35)', background: on ? 'var(--navy-800)' : 'var(--navy-600)', transform: `scale(${1 + Math.sin(p * Math.PI) * .12})` });
+      $('st' + i).style.opacity = on ? 1 : .45; });
+    const dp = prog(t, hits[5] + .25, .4);
+    set($('done4'), { left: (X0 + 5 * GAP + 70) + 'px', opacity: clamp(dp * 2), transform: `scale(${lerp(.2, 1, eBack(dp))})` });
+  }
+  if (cur === 4) {                                       // S5
+    const cnt = Math.round(60 * eOut(prog(t, P('s5', 0) + .3, 1.6)));
+    $('s5n').textContent = cnt + (cnt >= 60 ? '+' : '');
+    tiles.forEach((el, i) => { const p = prog(t, P('s5', 0) + .25 + i * .028, .35); set(el, { opacity: clamp(p * 2), transform: `scale(${lerp(.3, 1, eBack(p))})` }); });
+    oks.forEach((el, i) => { const p = prog(t, P('s5', 2) + i * .012, .25); set(el, { opacity: clamp(p * 2), transform: `scale(${lerp(.2, 1, eBack(p))})` }); });
+  }
+  if (cur === 5) {                                       // S6
+    const v = $('mart'); await seekVideo(v, .3 + lt);
+    slam($('s6h'), t, P('s6', 0) - .05, 1.4);
+    const p = prog(lt, 0, .55); set($('s6card'), { opacity: clamp(p * 2), transform: `translateY(${(1 - eOut(p)) * 160}px) scale(${lerp(.9, 1, eOut(p)) * (1 + lt * .008)})` });
+    pop($('s6chip'), t, P('s6', 1));
+  }
+  if (cur === 6) {                                       // S7
+    const ring = $('ring'), L = 2 * Math.PI * 232, rp = eIO(prog(lt, .05, .9));
+    ring.style.strokeDasharray = L; ring.style.strokeDashoffset = L * (1 - rp);
+    $('ring2').style.opacity = .7 * prog(lt, .6, .4);
+    const lp = prog(lt, .45, .6); set($('logoWrap'), { opacity: lp, transform: `scale(${lerp(.6, 1, eBack(lp))})` });
+    slam($('s7n'), t, P('s7', 0) - .05, 1.5);
+    set($('s7s'), { opacity: prog(t, P('s7', 0) + .4, .5) });
+  }
+};
+
+/* ════════ audio: VO + synth music bed (ducked) + sfx ════════ */
+window.buildAudio = async function (ctx) {
+  const sr = ctx.sampleRate, D = T.total;
+  const out = ctx.createGain(); out.connect(ctx.destination);
+  // VO
+  const voBus = ctx.createGain(); voBus.gain.value = 1.0; voBus.connect(out);
+  for (const s of Object.keys(window.VO)) {
+    const bin = atob(window.VO[s]), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const buf = await ctx.decodeAudioData(u8.buffer);
+    const src = ctx.createBufferSource(); src.buffer = buf; src.connect(voBus); src.start(T.vo[s]);
+  }
+  // music bus with ducking under VO
+  const mus = ctx.createGain(); mus.connect(out);
+  const base = .32, duck = .11;
+  mus.gain.setValueAtTime(0, 0); mus.gain.linearRampToValueAtTime(base, .4);
+  for (const s of Object.keys(T.vo)) { const a = T.vo[s], b = a + T.voDur[s]; mus.gain.setTargetAtTime(duck, a - .15, .06); mus.gain.setTargetAtTime(base, b + .1, .25); }
+  mus.gain.setTargetAtTime(0, D - 1.6, .4);
+  const noise = ctx.createBuffer(1, sr, sr), nd = noise.getChannelData(0); let seed = 7; for (let i = 0; i < sr; i++) { seed = (seed * 16807) % 2147483647; nd[i] = seed / 1073741823.5 - 1; }
+  const BPM = 104, beat = 60 / BPM;
+  const kick = at => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(130, at); o.frequency.exponentialRampToValueAtTime(42, at + .16); g.gain.setValueAtTime(.9, at); g.gain.exponentialRampToValueAtTime(.001, at + .32); o.connect(g).connect(mus); o.start(at); o.stop(at + .35); };
+  const hat = (at, v = .12) => { const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); s.buffer = noise; f.type = 'highpass'; f.frequency.value = 8000; g.gain.setValueAtTime(v, at); g.gain.exponentialRampToValueAtTime(.001, at + .05); s.connect(f).connect(g).connect(mus); s.start(at, Math.random() * .5); s.stop(at + .06); };
+  const CH = [[57, 64, 69, 72], [53, 60, 65, 69], [55, 62, 67, 71], [52, 59, 64, 67]];   // Am F G Em
+  const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+  for (let b = 0, at = 0; at < D; b++, at = b * beat) {
+    if (b % 2 === 0 || at > T.start[1]) kick(at);
+    hat(at + beat / 2); if (at > T.start[1]) hat(at + beat * .75, .06);
+    if (b % 4 === 0) {
+      const ch = CH[(b / 4) % 4];
+      ch.forEach(m => { const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter(); o.type = 'sawtooth'; o.frequency.value = mtof(m); f.type = 'lowpass'; f.frequency.value = 1100; g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.035, at + .25); g.gain.setTargetAtTime(0, at + beat * 3.6, .2); o.connect(f).connect(g).connect(mus); o.start(at); o.stop(at + beat * 4.5); });
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'triangle'; o.frequency.value = mtof(ch[0] - 24); g.gain.setValueAtTime(.18, at); g.gain.setTargetAtTime(0, at + beat * 3.5, .15); o.connect(g).connect(mus); o.start(at); o.stop(at + beat * 4.2);
+    }
+  }
+  // sfx
+  const sfx = ctx.createGain(); sfx.gain.value = .55; sfx.connect(out);
+  const whoosh = at => { const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); s.buffer = noise; f.type = 'bandpass'; f.Q.value = 1; f.frequency.setValueAtTime(400, at); f.frequency.exponentialRampToValueAtTime(3500, at + .4); g.gain.setValueAtTime(.001, at); g.gain.exponentialRampToValueAtTime(.5, at + .2); g.gain.exponentialRampToValueAtTime(.001, at + .45); s.connect(f).connect(g).connect(sfx); s.start(at); s.stop(at + .5); };
+  const popS = (at, f0 = 500) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(f0, at); o.frequency.exponentialRampToValueAtTime(f0 * 2.2, at + .08); g.gain.setValueAtTime(.4, at); g.gain.exponentialRampToValueAtTime(.001, at + .12); o.connect(g).connect(sfx); o.start(at); o.stop(at + .14); };
+  const thud = at => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(160, at); o.frequency.exponentialRampToValueAtTime(50, at + .25); g.gain.setValueAtTime(.8, at); g.gain.exponentialRampToValueAtTime(.001, at + .3); o.connect(g).connect(sfx); o.start(at); o.stop(at + .32); };
+  const ding = at => [1318, 1976].forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; g.gain.setValueAtTime(.2 / (i + 1), at); g.gain.exponentialRampToValueAtTime(.001, at + .9); o.connect(g).connect(sfx); o.start(at); o.stop(at + 1); });
+  T.start.slice(1).forEach(b => whoosh(b - .25));
+  thud(P('s1', 0)); [1, 2, 3].forEach(i => thud(P('s1', i)));
+  [1, 2, 3, 4, 5].forEach(i => popS(P('s2', i), 520));
+  [1, 2, 3, 4].forEach(i => popS(P('s3', i), 640));
+  [1, 2, 3, 4, 5, 6].forEach(i => popS(P('s4', i), 440 + i * 40));
+  popS(P('s5', 0) + .3, 700); ding(P('s5', 2));
+  thud(P('s6', 0)); popS(P('s6', 1), 600);
+  ding(P('s7', 0));
+};
+
+if (!location.search.includes('render')) window.seek(0);
+</script>
+</body>
+</html>
